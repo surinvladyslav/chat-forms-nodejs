@@ -1,0 +1,248 @@
+version: '3.5'
+
+services:
+#  index:
+#    build:
+#      context: .
+#      dockerfile: ../Dockerfile
+#    ports:
+#      - 3001:3001
+#    env_file: ../.env
+#    volumes:
+#      - /src/node_modules
+#      - .:/src
+#    depends_on:
+#      - postgres
+#    restart: always
+#    build:
+#      context: .
+#    depends_on:
+#      - postgres
+#    env_file: ../.env
+#    ports:
+#      - 5000:5000
+#    volumes:
+#      - .:/index
+#
+#  index:
+#    build: .
+#    depends_on:
+#      - postgres
+#    environment:
+#      DATABASE_URL: postgres://user:pass@postgres:5432/db
+#      NODE_ENV: development
+#      PORT: 3000
+#    ports:
+#      - "3000:3000"
+#    command: npm run dev
+#    volumes:
+#      - .:/index/
+#      - /index/node_modules
+#      -
+#
+#
+#  index:
+#    container_name: index
+#    image: node:alpine
+#    build:
+#      context: .
+##    volumes:
+##      - .:/src
+##    command: npm run dev
+#    ports:
+#      - 5000:5000
+#    depends_on:
+#      - postgres
+#    environment:
+#      - DATABASE_URL=postgres://votetracker@postgres/codes
+#      - POSTGRES_PASSWORD=password
+#      - NODE_ENV=development
+#      - DEBUG=nodejs-docker-express:*
+
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 5050:80
+    networks:
+      - postgres
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
+
+
+#version: '3'
+#
+#services :
+#  postgres:
+#    container_name: postgresql_container
+#    image: postgres
+#    env_file: ../.env
+#    ports:
+#      - "5432:5432"
+#    environment:
+#      - POSTGRES_USER=user
+#      - POSTGRES_PASSWORD=admin
+#    volumes:
+#      - postgresql_container:/var/lib/postgresql/data
+#    restart: always
+#
+#
+#  pgadmin:
+#    container_name: pgadmin4_container
+#    image: dpage/pgadmin4
+#    restart: always
+#    ports:
+#      - "5050:80"
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: raj@nola.com
+#      PGADMIN_DEFAULT_PASSWORD: admin
+#    volumes:
+#      - pgadmin:/var/lib/pgadmin
+
+#volumes:
+#  postgresql_container:
+#    driver: local
+
+#volumes:
+#  postgres:
+#  pgadmin:
+
+#
+#version: '3'
+#
+#services:
+#  postgres:
+#    container_name: postgres_container
+#    image: postgres
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 1234
+#      POSTGRES_DB: postgres
+##      PGDATA: /data/postgres
+#    volumes:
+#      - postgres:/var/lib/postgresql
+#    ports:
+#      - "5432:5432"
+#    networks:
+#      - postgres
+#    restart: unless-stopped
+#
+#  pgadmin:
+#    container_name: pgadmin_container
+#    image: dpage/pgadmin4
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+#      PGADMIN_DEFAULT_PASSWORD: admin
+##      PGADMIN_CONFIG_SERVER_MODE: 'False'
+#    volumes:
+#      - pgadmin:/var/lib/pgadmin
+#    depends_on:
+#      - postgres
+#    ports:
+#      - "5050:80"
+#    networks:
+#      - postgres
+##    restart: unless-stopped
+#
+#networks:
+#  postgres:
+#    driver: bridge
+#
+#volumes:
+#  postgres:
+#  pgadmin:
+
+#version: '3'
+#services:
+#  postgres:
+#    container_name: container-postgresdb
+#    image: postgres
+#    hostname: postgres
+#    ports:
+#      - "5432:5432"
+#    environment:
+#      POSTGRES_DB: postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 1234
+#      PGDATA: /var/lib/postgresql/data
+#    volumes:
+#      - postgres-data:/var/lib/postgresql/data
+#    restart: unless-stopped
+#
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    depends_on:
+#      - postgres
+#    ports:
+#      - "5050:80"
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+#      PGADMIN_DEFAULT_PASSWORD: admin
+#      MAX_LOGIN_ATTEMPTS: 0
+#    restart: unless-stopped
+#    volumes:
+#      - pgadmin-data:/var/lib/pgadmin
+#
+#volumes:
+#  postgres-data:
+#  pgadmin-data:
+#
+
+
+#version: "3"
+#services:
+#  db:
+#    image: postgres
+#    container_name: local_pgdb
+#    restart: always
+#    ports:
+#      - "54320:5432"
+#    environment:
+#      POSTGRES_USER: user
+#      POSTGRES_PASSWORD: admin
+#    volumes:
+#      - local_pgdata:/var/lib/postgresql/data
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    container_name: pgadmin4_container
+#    restart: always
+#    ports:
+#      - "5050:80"
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: raj@nola.com
+#      PGADMIN_DEFAULT_PASSWORD: admin
+#    volumes:
+#      - pgadmin-data:/var/lib/pgadmin
+#
+#volumes:
+#  local_pgdata:
+#  pgadmin-data:
