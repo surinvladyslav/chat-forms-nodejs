@@ -1,17 +1,14 @@
+require('dotenv').config()
 const express = require('express');
-const cors = require('cors');
-const {Sequelize} = require('sequelize');
 const httpStatus = require('http-status');
-
-const {env} = require('./config/settings');
+const createError = require('http-errors');
+const cors = require('cors');
 const db = require('./database/models');
-const config = require(`${__dirname}/./config/config.js`)[env];
-
-const {errorException, errorConverter} = require('./middlewares/errorHandler');
 
 const AppError = require('./utils/appError');
+const {errorConverter, errorException} = require("./middlewares/errorHandler");
 
-const apiRouter = require('./routes/api');
+const apiRouter = require('./routes');
 
 const app = express();
 
@@ -19,43 +16,34 @@ app.use(cors());
 app.options('*', cors());
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', apiRouter);
 
-// db.sequelize.sync();
+console.log(db.url);
 
-// drop the table if it already exists
-db.sequelize.sync({ force: true }).then(() => {
-  console.log('Drop and re-sync db.');
+db.mongoose.connect(db.url, {
+    useNewUrlParser: true,
+}).then(() => {
+    console.log('successfully connected to the database');
+}).catch(err => {
+    console.log('error connecting to the database');
+    console.log(err);
+    process.exit();
 });
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
-
-sequelize
-    .sync()
-    .then(() => {
-      console.log(`DB connection sucessful.`);
-    })
-    .catch((err) => {
-      console.log(`Unable to connect to the database', error: ${err.message}.`);
-    });
+app.use(function (req, res, next) {
+    next(createError(404));
+});
 
 app.use((req, res, next) => {
-  next(new AppError(httpStatus.NOT_FOUND, 'Not found'));
+    next(new AppError(httpStatus.NOT_FOUND, 'Not found'));
 });
 
-app.use(errorException);
 app.use(errorConverter);
+app.use(errorException);
 
 const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}.`);
-});
+app.listen(port, () => console.log(`Server is running on port ${port}.`))
 
 module.exports = app;

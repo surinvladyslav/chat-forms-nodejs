@@ -14,18 +14,15 @@ docker-down:
 	cd ${DOCKER_FOLDER} && docker-compose down
 
 migrate:
-	${NPM} run migration:run
+	${NPM} run migrate
 
 rollback:
-	${NPM} run migration:revert
+	${NPM} run migrate:undo
 
 start-dev:
 	${NPM} run start:dev
 
 start:
 	${NPM} run start
-
-build:
-	${NPM} run build
 
 pre-install: copy-env install
