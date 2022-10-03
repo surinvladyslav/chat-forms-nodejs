@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+const {Schema, model} = require('mongoose');
 
 const forms = new Schema({
     formId: {type: String, unique: true, required: true},

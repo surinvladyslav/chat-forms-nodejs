@@ -8,10 +8,10 @@ install:
 	${NPM} ci
 
 docker-up:
-	cd ${DOCKER_FOLDER} && docker-compose up -d
+	cd ${DOCKER_FOLDER} && sudo docker-compose up -d
 
 docker-down:
-	cd ${DOCKER_FOLDER} && docker-compose down
+	cd ${DOCKER_FOLDER} && sudo docker-compose down
 
 migrate:
 	${NPM} run migrate

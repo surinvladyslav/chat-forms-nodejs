@@ -1,8 +1,9 @@
 const express = require('express');
-const formsRoutes = require('./forms');
+const formController = require('../controllers/index');
 
 const router = express.Router();
 
-router.use('/forms', formsRoutes);
+router.get('/:id', formController.findOne);
+router.post('/:id', formController.submit).post('/', formController.create);
 
 module.exports = router;
