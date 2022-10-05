@@ -3,7 +3,8 @@ const formController = require('../controllers/index');
 
 const router = express.Router();
 
+router.post('/', formController.create);
+router.post('/:id', formController.submit)
 router.get('/:id', formController.findOne);
-router.post('/:id', formController.submit).post('/', formController.create);
 
 module.exports = router;

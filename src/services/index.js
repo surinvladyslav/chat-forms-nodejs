@@ -2,7 +2,6 @@ const forms = require('../database/models/forms');
 const fetch = require('node-fetch');
 const puppeteer = require('puppeteer');
 const AppError = require('../utils/appError');
-const httpStatus = require('http-status');
 const questionTypes = require('../config/types');
 
 const addForms = (payload) => {
