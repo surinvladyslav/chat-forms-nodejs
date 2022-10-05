@@ -2,7 +2,6 @@ const httpStatus = require('http-status');
 const formsService = require('../services');
 const catchError = require('../utils/catchError');
 const AppError = require('../utils/appError');
-const {getId} = require('../services');
 const questionTypes = require('../config/types');
 
 const submit = catchError(async (req, res) => {
@@ -37,17 +36,13 @@ const create = catchError(async (req, res) => {
   }
 
   const form = await formsService.getFormByFormId(id);
-  if (!form) {
-    throw new AppError(httpStatus.NOT_FOUND, `form not found`);
-  }
 
   const formData = await formsService.getFormData(id, token);
   if (!formData) {
     throw new AppError(httpStatus.NOT_FOUND, `form data not found`);
   }
 
-  // const imageUri = await formsService.getFormsImage(formData?.responderUri);
-  // [];
+  const formImage = await formsService.getFormImage(formData?.responderUri);
 
   const data = [
     {
@@ -56,6 +51,7 @@ const create = catchError(async (req, res) => {
     },
     {
       text: `Welcome to ${formData?.info?.title}`,
+      image: formImage,
       type: questionTypes.text,
     },
     {
@@ -203,8 +199,10 @@ const create = catchError(async (req, res) => {
     return res.status(httpStatus.CREATED).json(form.id);
   }
 
-  // imageUri: imageUri
-  const newForms = await formsService.addForms({...formData, items: data});
+  const newForms = await formsService.addForms({
+    ...formData,
+    items: data,
+  });
   return res.status(httpStatus.CREATED).json(newForms.id);
 });
 

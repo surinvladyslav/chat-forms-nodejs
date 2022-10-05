@@ -106,11 +106,7 @@ const getFormData = async (formId, token) => {
   }
 };
 
-const getId = (length = 8) => {
-  return Math.random().toString(16).substr(2, length);
-};
-
-const getFormsImage = async (url) => {
+const getFormImage = async (url) => {
   const browser = await puppeteer.launch({headless: true});
   const page = await browser.newPage();
   await page.goto(url, {
@@ -155,10 +151,9 @@ module.exports = {
   findOne,
   getFormByFormId,
   getLink,
-  getFormsImage,
+  getFormImage,
   updateForms,
   fetchForm,
   getFormData,
   getIds,
-  getId,
 };
