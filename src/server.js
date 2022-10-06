@@ -22,6 +22,10 @@ app.use('/api/forms', apiRouter);
 
 console.log(db.url);
 
+app.get((req, res) => {
+  res.json('hello world');
+})
+
 db.mongoose.connect(db.url, {
     useNewUrlParser: true,
 }).then(() => {
