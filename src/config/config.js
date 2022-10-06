@@ -1,5 +1,5 @@
 require('dotenv').config();
 
 module.exports = {
-  url: `mongodb://localhost:27017/forms`,
+  url: `mongodb://0.0.0.0:27017/forms`,
 };
