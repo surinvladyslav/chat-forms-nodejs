@@ -1,33 +1,48 @@
 require('dotenv').config()
 const express = require('express');
-const httpStatus = require('http-status');
-const createError = require('http-errors');
+// const httpStatus = require('http-status');
+// const createError = require('http-errors');
 const cors = require('cors');
 const db = require('./database/models');
 
-const AppError = require('./utils/appError');
-const {errorConverter, errorException} = require("./middlewares/errorHandler");
+// const AppError = require('./utils/appError');
+// const {errorConverter, errorException} = require("./middlewares/errorHandler");
 
 const apiRouter = require('./routes');
 
 const app = express();
 
-app.use(cors());
-app.options('*', cors());
+// app.use(cors());
+// app.options('*', cors());
+// app.use(function (req, res, next) {
+//   res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-    With,content-type,Accept,content-type,application/json');
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS,     PUT, PATCH, DELETE');
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   next();
+// });
+//
+// const urlencodedParser = bodyParser.urlencoded({
+//   extended: true
+// });
+// app.use(urlencodedParser);
+// app.use(bodyParser.json({limit: '10mb', extended: true}));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
+const corsOptions = {
+  origin: "http://localhost:3000"
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/forms', apiRouter);
-
 console.log(db.url);
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
 db.mongoose.connect(db.url, {
-    useNewUrlParser: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 }).then(() => {
     console.log('successfully connected to the database');
 }).catch(err => {
@@ -36,18 +51,22 @@ db.mongoose.connect(db.url, {
     process.exit();
 });
 
-app.use(function (req, res, next) {
-    next(createError(404));
+app.use('/api/forms', apiRouter);
+
+// app.use(function (req, res, next) {
+//     next(createError(404));
+// });
+
+// app.use((req, res, next) => {
+//     next(new AppError(httpStatus.NOT_FOUND, 'Not found'));
+// });
+
+// app.use(errorConverter);
+// app.use(errorException);
+
+const PORT = process.env.NODE_DOCKER_PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
 });
-
-app.use((req, res, next) => {
-    next(new AppError(httpStatus.NOT_FOUND, 'Not found'));
-});
-
-app.use(errorConverter);
-app.use(errorException);
-
-const port = process.env.PORT || 8080;
-app.listen(port, () => console.log(`Server is running on port ${port}.`))
 
 module.exports = app;
