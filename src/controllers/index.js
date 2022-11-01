@@ -42,7 +42,7 @@ const create = catchError(async (req, res) => {
     throw new AppError(httpStatus.NOT_FOUND, `form data not found`);
   }
 
-  // const formImage = await formsService.getFormImage(formData?.responderUri);
+  const formImage = await formsService.getFormImage(formData?.responderUri);
 
   const data = [
     {
@@ -51,7 +51,7 @@ const create = catchError(async (req, res) => {
     },
     {
       text: `Welcome to ${formData?.info?.title}`,
-      // image: formImage,
+      image: formImage,
       type: questionTypes.text,
     },
     {
