@@ -7,8 +7,11 @@ copy-env:
 install:
 	${NPM} ci
 
+docker-build:
+	cd ${DOCKER_FOLDER} && sudo docker-compose build
+
 docker-up:
-	cd ${DOCKER_FOLDER} && sudo docker-compose up -d
+	cd ${DOCKER_FOLDER} && sudo docker-compose up -d --build
 
 docker-down:
 	cd ${DOCKER_FOLDER} && sudo docker-compose down

@@ -32,7 +32,7 @@
     "pg-error": "^1.1.0",
     "pg-hstore": "^2.3.4",
     "prettier": "^2.7.1",
-    "puppeteer": "^16.2.0",
+    "puppeteer": "^19.2.0",
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {
